@@ -67,6 +67,7 @@ router.post("/login", async (req, res, next) => {
 
   if (!username || !password) {
     res.send({
+      error: "MissingCredentialsError",
       name: "MissingCredentialsError",
       message: "Please supply both a username and password",
     });
@@ -81,9 +82,9 @@ router.post("/login", async (req, res, next) => {
       res.send({ message: "you're logged in!", token, user });
     } else {
       res.send({
-        error: "UserError",
-        name: "Error",
-        message: "Not logged in",
+        error: "IncorrectCredentialsError",
+        name: "IncorrectCredentialsError",
+        message: "Username or password is incorrect",
       });
     }
   } catch (error) {

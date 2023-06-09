@@ -65,14 +65,15 @@ router.patch("/:routineId", requireUser, async (req, res, next) => {
         name: "UnauthorizedUpdateError",
         message: `User ${req.user.username} is not allowed to update ${routine.name}`,
       });
+    } else {
+      const updatedRoutine = await updateRoutine({
+        id: routineId,
+        isPublic,
+        name,
+        goal,
+      });
+      res.send(updatedRoutine);
     }
-    const updatedRoutine = await updateRoutine({
-      id: routineId,
-      isPublic,
-      name,
-      goal,
-    });
-    res.send(updatedRoutine);
   } catch (error) {
     next(error);
   }
@@ -92,7 +93,7 @@ router.delete("/:routineId", requireUser, async (req, res, next) => {
         message: `User ${req.user.username} is not allowed to delete ${routine.name}`,
       });
     } else {
-      const deleteRoutine = await destroyRoutine(routineId);
+      await destroyRoutine(routineId);
       res.send(routine);
     }
   } catch (error) {

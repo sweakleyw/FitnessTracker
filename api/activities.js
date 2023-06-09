@@ -57,11 +57,11 @@ router.post("/", requireUser, async (req, res, next) => {
         name: "ActivityExistsError",
         message: `An activity with name ${name} already exists`,
       });
+    } else {
+      const activity = await createActivity({ name, description });
+
+      res.send(activity);
     }
-
-    const activity = await createActivity({ name, description });
-
-    res.send(activity);
   } catch (error) {
     next(error);
   }

@@ -24,14 +24,15 @@ router.patch("/:routineActivityId", requireUser, async (req, res, next) => {
         name: "UnauthorizedUpdateError",
         message: `User ${req.user.username} is not allowed to update ${routine.name}`,
       });
-    }
-    const updatedRoutineActivity = await updateRoutineActivity({
-      id: routineActivityId,
-      duration,
-      count,
-    });
+    } else {
+      const updatedRoutineActivity = await updateRoutineActivity({
+        id: routineActivityId,
+        duration,
+        count,
+      });
 
-    res.send(updatedRoutineActivity);
+      res.send(updatedRoutineActivity);
+    }
   } catch (error) {
     next(error);
   }
@@ -51,13 +52,13 @@ router.delete("/:routineActivityId", requireUser, async (req, res, next) => {
         name: "UnauthorizedUpdateError",
         message: `User ${req.user.username} is not allowed to delete ${routine.name}`,
       });
+    } else {
+      const deleteRoutineActivity = await destroyRoutineActivity(
+        routineActivityId
+      );
+
+      res.send(deleteRoutineActivity);
     }
-
-    const deletedRoutineActivity = await destroyRoutineActivity(
-      routineActivityId
-    );
-
-    res.send(deletedRoutineActivity);
   } catch (error) {
     next(error);
   }
